@@ -102,17 +102,6 @@
             transform: translateY(0);
         }
         
-        .bio-header {
-            font-size: 2.5rem;
-            font-weight: 500;
-            margin-bottom: 48px;
-            background: linear-gradient(90deg, #A970FF, #5B7CFF);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -0.02em;
-        }
-        
         .bio-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -145,22 +134,6 @@
             margin-bottom: 24px;
         }
         
-        .avatar-input {
-            width: 100%;
-            padding: 10px;
-            margin-top: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: #E6E6E6;
-            font-size: 1rem;
-        }
-        
-        .avatar-input:focus {
-            outline: none;
-            border-color: #A970FF;
-        }
-        
         .tech-pills {
             display: flex;
             flex-wrap: wrap;
@@ -186,9 +159,6 @@
             .bio-content {
                 grid-template-columns: 1fr;
             }
-            .bio-header {
-                font-size: 2rem;
-            }
             .swipe-hint {
                 font-size: 12px;
                 padding: 8px 16px;
@@ -206,13 +176,10 @@
         
         <section id="bio-section" class="bio-section">
             <div class="bio-container" id="bio-container">
-                <h1 class="bio-header">LART Showcase</h1>
                 <div class="bio-content">
                     <div class="bio-card">
                         <h3>О проекте</h3>
                         <p>LART — это платформа для создания интерактивного 3D-контента и визуализации данных в вебе. С 2023 года мы разрабатываем инструменты, которые делают передовые технологии доступными и понятными.</p>
-                        <h3>Установить иконку вкладки</h3>
-                        <input type="text" id="avatar-url" class="avatar-input" placeholder="Вставьте URL с Imgur (например, https://i.imgur.com/abc123.jpg)">
                     </div>
                     <div class="bio-card">
                         <h3>Технологии</h3>
@@ -240,27 +207,6 @@
     <script>
         let mainContainer = document.getElementById('main-container');
         let bioContainer = document.getElementById('bio-container');
-        let avatarUrlInput = document.getElementById('avatar-url');
-        let favicon = document.getElementById('favicon');
-        
-        // Загрузка сохраненного URL из localStorage при запуске
-        const savedAvatarUrl = localStorage.getItem('avatarUrl');
-        if (savedAvatarUrl) {
-            favicon.href = savedAvatarUrl;
-            avatarUrlInput.value = savedAvatarUrl;
-        }
-        
-        // Обработчик ввода URL
-        avatarUrlInput.addEventListener('input', function() {
-            const url = avatarUrlInput.value.trim();
-            if (url && url.match(/^https:\/\/i\.imgur\.com\/[a-zA-Z0-9]+\.(jpg|png|gif)$/)) {
-                favicon.href = url; // Устанавливаем favicon
-                localStorage.setItem('avatarUrl', url); // Сохраняем в localStorage
-            } else if (url === '') {
-                favicon.href = ''; // Убираем favicon, если поле пустое
-                localStorage.removeItem('avatarUrl');
-            }
-        });
         
         window.onload = function() {
             if (typeof THREE === 'undefined') {
