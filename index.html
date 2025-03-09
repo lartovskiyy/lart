@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LART</title>
+    <link id="favicon" rel="icon" type="image/png" href="https://i.imgur.com/g1WKWAE.png">
     <style>
         * {
             margin: 0;
@@ -16,7 +17,7 @@
             background: #0D0D0D;
             color: #E6E6E6;
             overflow-x: hidden;
-            scroll-behavior: smooth; /* Плавный скролл при ручной прокрутке */
+            scroll-behavior: smooth;
             line-height: 1.5;
         }
         
@@ -24,7 +25,7 @@
             height: 100vh;
             overflow-y: auto;
             overflow-x: hidden;
-            scroll-snap-type: y mandatory; /* Привязка к секциям при скролле */
+            scroll-snap-type: y mandatory;
             position: relative;
             width: 100vw;
         }
@@ -144,6 +145,22 @@
             margin-bottom: 24px;
         }
         
+        .avatar-input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #E6E6E6;
+            font-size: 1rem;
+        }
+        
+        .avatar-input:focus {
+            outline: none;
+            border-color: #A970FF;
+        }
+        
         .tech-pills {
             display: flex;
             flex-wrap: wrap;
@@ -184,7 +201,7 @@
         <section id="hero-section">
             <div id="loading">Загрузка...</div>
             <canvas id="canvas"></canvas>
-            <div class="swipe-hint">Свайпай</div>
+            <div class="swipe-hint">Свайп вниз для деталей</div>
         </section>
         
         <section id="bio-section" class="bio-section">
@@ -194,15 +211,17 @@
                     <div class="bio-card">
                         <h3>О проекте</h3>
                         <p>LART — это платформа для создания интерактивного 3D-контента и визуализации данных в вебе. С 2023 года мы разрабатываем инструменты, которые делают передовые технологии доступными и понятными.</p>
+                        <h3>Установить иконку вкладки</h3>
+                        <input type="text" id="avatar-url" class="avatar-input" placeholder="Вставьте URL с Imgur (например, https://i.imgur.com/abc123.jpg)">
                     </div>
                     <div class="bio-card">
                         <h3>Технологии</h3>
                         <p>Используем современный стек для обеспечения плавной работы и впечатляющего опыта на любых устройствах.</p>
                         <div class="tech-pills">
-                            <div class="tech-pill">SPACEVPN</div>
-                            <div class="tech-pill">LRTVSK</div>
-                            <div class="tech-pill">ECOSYSTEM</div>
-                            <div class="tech-pill">TG</div>
+                            <div class="tech-pill">Three.js</div>
+                            <div class="tech-pill">WebGL</div>
+                            <div class="tech-pill">GLSL</div>
+                            <div class="tech-pill">React</div>
                             <div class="tech-pill">TypeScript</div>
                             <div class="tech-pill">GSAP</div>
                             <div class="tech-pill">HTML5</div>
@@ -221,6 +240,27 @@
     <script>
         let mainContainer = document.getElementById('main-container');
         let bioContainer = document.getElementById('bio-container');
+        let avatarUrlInput = document.getElementById('avatar-url');
+        let favicon = document.getElementById('favicon');
+        
+        // Загрузка сохраненного URL из localStorage при запуске
+        const savedAvatarUrl = localStorage.getItem('avatarUrl');
+        if (savedAvatarUrl) {
+            favicon.href = savedAvatarUrl;
+            avatarUrlInput.value = savedAvatarUrl;
+        }
+        
+        // Обработчик ввода URL
+        avatarUrlInput.addEventListener('input', function() {
+            const url = avatarUrlInput.value.trim();
+            if (url && url.match(/^https:\/\/i\.imgur\.com\/[a-zA-Z0-9]+\.(jpg|png|gif)$/)) {
+                favicon.href = url; // Устанавливаем favicon
+                localStorage.setItem('avatarUrl', url); // Сохраняем в localStorage
+            } else if (url === '') {
+                favicon.href = ''; // Убираем favicon, если поле пустое
+                localStorage.removeItem('avatarUrl');
+            }
+        });
         
         window.onload = function() {
             if (typeof THREE === 'undefined') {
@@ -293,7 +333,7 @@
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
                             bioContainer.classList.add('visible');
-                            observer.unobserve(entry.target); // Останавливаем наблюдение после появления
+                            observer.unobserve(entry.target);
                         }
                     });
                 }, { threshold: 0.1 });
